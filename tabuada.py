@@ -11,11 +11,11 @@
 ---Tabuada do 2---
 
     2 x 1 = 2
-    4 x 2 = 8
+    2 x 4 = 8
 ...
 ##################
 """
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "Flauberth"
 
 
