@@ -34,7 +34,6 @@ if arguments[0] == "read":
     # leitura das notas
     for line in open(filepath):
         title, tag, text = line.split("\t")
-        print(tag)
         if tag.lower() == arguments[1].lower():
             print(f"title: {title}")
             print(f'text: {text}')
