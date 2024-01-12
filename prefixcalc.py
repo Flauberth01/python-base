@@ -36,14 +36,13 @@ from datetime import datetime
 arguments = sys.argv[1:]
 
 
-# TODO: Exceptions
+# Validação
 if not arguments:
     operation = input("operação: ")
     n1 = input("n1: ")
     n2 = input("n2: ")
     arguments = [operation, n1, n2]
-
-if len(arguments) != 3:
+elif len(arguments) != 3:
     print("Número de argumentos inválidos")
     print("ex: `sum 5 5`")
     sys.exit(1)
@@ -56,7 +55,7 @@ if operation not in valid_operations:
     print(valid_operations)
     sys.exit(1)
 
-valid_nums = []
+validated_nums = []
 for num in nums:
     # TODO: Repetição while + exceptions
     if not num.replace(".", "").isdigit():
@@ -66,10 +65,13 @@ for num in nums:
         num = float(num)
     else:
         num = int(num)
+    validated_nums.append(num)
 
-    valid_nums.append(num)
-
-n1, n2 = valid_nums
+try: 
+    n1, n2 = validated_nums
+except ValueError as e:
+    print(str(e))
+    sys.exit(1)
 
 # TODO: Usar dict de funcoes
 if operation == "sum":
@@ -81,14 +83,18 @@ elif operation == "mul":
 elif operation == "div":
     result = n1 / n2
 
-path = os.curdir
+print(f"O resultado é {result}")
+
+path = "/"
 filepath = os.path.join(path, "prefixcalc.log")
 timestamp = datetime.now().isoformat()
 user = os.getenv("USER", "anonymous")
 
-with open(filepath, "a") as file_:
-    file_.write(f"{timestamp} - {user} - {operation},{n1},{n2} = {result}\n")
+try:
+    with open(filepath, "a") as file_:
+        file_.write(f"{timestamp} - {user} - {operation},{n1},{n2} = {result}\n")
+except PermissionError as e:
+    print(str(e))
+    sys.exit(1)
 
 # print(f"{operation}, {n1},{n2} = {result}", file=open(filename, "a"))
-
-print(f"O resultado é {result}")
