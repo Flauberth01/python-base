@@ -21,23 +21,34 @@ Execução:
     ou
     ./hello.py
 """
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __author__ = "Flauberth Brito"
 __license__ = "Unlicense"
 
 import os
 import sys
 
-arguments = {"lang": None, "count": 1,}
+arguments = {"lang": None, "count": 1}
 
 for arg in sys.argv[1:]:
     # TODO: tratar ValueError
-    key, value = arg.split("=")
+    try:
+        key, value = arg.split("=")
+    except ValueError as e:
+        # TODO: Logging
+        print(f"[ERROR] {str(e)}")
+        print("You need to use `=`")
+        print(f"You passed {arg}")
+        print(f"try with --key=value")
+        sys.exit(1)
     key = key.lstrip("-").strip()
     value = value.strip()
+
+    # Validação
     if key not in arguments:
         print(f"Invalid Option `{key}`")
         sys.exit()
+
     arguments[key] = value
 
 current_language = arguments["lang"]
@@ -57,8 +68,19 @@ msg = {
     "es_SP": "Hola, Mundo!",
     "fr_FR": "Bonjour Monde",
 }
+
+"""
+# try com valor default
+message = msg.get(current_language, msg["en_US"])
+""" 
+
+try:
+    message = msg[current_language]
+except KeyError as e:
+    print(f"[ERROR] {str(e)}")
+    print(f"Language is invalid, choose from: {list(msg.keys())}")
+    sys.exit(1)
     
 print(
-    msg[current_language] * int(arguments["count"])
+    message * int(arguments["count"])
 )
- 
