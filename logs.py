@@ -2,6 +2,7 @@
 
 import os
 import logging
+from logging import handlers
 
 
 # BOILERPLATE
@@ -12,16 +13,22 @@ log_level = os.getenv("LOG_LEVEL", "WARNING").upper()
 # nossa instancia
 log = logging.Logger("flauberth", log_level)
 # level
-ch = logging.StreamHandler() # Console/terminal/stderr
-ch.setLevel(logging.DEBUG)
+# ch = logging.StreamHandler() # Console/terminal/stderr
+# ch.setLevel(logging.DEBUG)
+fh = handlers.RotatingFileHandler(
+    "meulog.log",
+    maxBytes=300, # 10**6 -> 1 MEGA
+    backupCount=10,
+) 
+fh.setLevel(log_level)
 # formatacao
 fmt = logging.Formatter(
     '%(asctime)s %(name)s %(levelname)s'
     'l:%(lineno)d f:%(filename)s: %(message)s'
 )
-ch.setFormatter(fmt)
+fh.setFormatter(fmt)
 # destino
-log.addHandler(ch)
+log.addHandler(fh)
 
 """
 log.debug("Mensagem pro dev, qe, sysadmin")
